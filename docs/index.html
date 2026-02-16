@@ -1,110 +1,348 @@
 <!DOCTYPE html>
-<html lang="es">
+<html class="light" lang="es">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gasolineras Alcalá de Henares</title>
-  <!-- Bootstrap 5 CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <title>Alcalá de Henares - Turismo y Servicios</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;display=swap"
+    rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+    rel="stylesheet" />
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#ed2630",
+            "burdeos": "#800020",
+            "background-light": "#f8f6f6",
+            "background-dark": "#221011",
+            "dark-grey": "#333333",
+            "soft-grey": "#F5F5F5",
+          },
+          fontFamily: {
+            "display": ["Inter", "sans-serif"]
+          },
+          borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+        },
+      },
+    }
+  </script>
+  <style type="text/tailwindcss">
+    body { font-family: 'Inter', sans-serif; }
+        .glass-header {
+            backdrop-filter: blur(10px);
+            background-color: rgba(248, 246, 246, 0.9);
+        }
+        .fuel-select {
+            background-image: none;
+        }
+    </style>
   <style>
-    /* Custom styles to complement Bootstrap */
-    .cheapest {
-      color: #198754;
-      font-weight: bold;
-    }
-
-    /* Bootstrap success color */
-    .cheap-range {
-      background-color: #d1e7dd !important;
-    }
-
-    /* Bootstrap table-success color */
-    #loading {
-      font-style: italic;
-      color: #666;
-    }
-
-    #error {
-      color: #dc3545;
-      font-weight: bold;
+    body {
+      min-height: max(884px, 100dvh);
     }
   </style>
 </head>
 
-<body>
-  <div class="container">
-    <h1 class="text-center my-4">Precios Gasolineras Alcalá de Henares</h1>
-
-    <div class="card p-3 mb-4 shadow-sm">
-      <div class="mb-3">
-        <label for="fuel-select" class="form-label fw-bold">Selecciona combustible:</label>
-        <select id="fuel-select" class="form-select">
-          <option value="">Cargando combustibles...</option>
-        </select>
+<body class="bg-background-light dark:bg-background-dark font-display text-dark-grey selection:bg-primary/30">
+  <header class="fixed top-0 w-full z-50 glass-header border-b border-burdeos/10">
+    <div class="max-w-screen-xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="w-8 h-8 bg-burdeos rounded flex items-center justify-center">
+          <span class="text-white font-bold">A</span>
+        </div>
+        <span class="font-bold tracking-tight text-burdeos">ALCALÁ</span>
       </div>
-      <div class="text-end">
-        <small id="last-updated" class="text-muted"></small>
+      <nav class="hidden md:flex items-center gap-8">
+        <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Turismo</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Servicios</a>
+        <a class="text-sm font-medium hover:text-primary transition-colors" href="#">Gasolineras</a>
+      </nav>
+      <button id="theme-toggle" class="p-2 text-burdeos hover:bg-burdeos/10 rounded-full transition-colors mr-2">
+        <span class="material-icons">dark_mode</span>
+      </button>
+      <button class="p-2 text-burdeos">
+        <span class="material-icons">menu</span>
+      </button>
+    </div>
+  </header>
+  <section class="relative h-[600px] flex items-center justify-center overflow-hidden">
+    <img alt="Estatua de Cervantes en Alcalá de Henares" class="absolute inset-0 w-full h-full object-cover"
+      src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOO7VTLOwv86VsZMSGI79fcl-notqvaRv_xbLhi8IhtThsUbgr5f6oVEwvdoeVhe_X6ed48aAbuDZhBG5YHPqsXnrlgqwhVjxrI5Kju9pvu5A-69-B-0vR4Im0U2gutDN_NfNPNeadb8kIHYq53g8OvscKJhuuOHGCpN6PTmB-VxeFnAj0g62etJO2RinE1OIQn_5-A59mF-nYW6oxttcAv1kiSuLL2RDd_xZBd9DBvGHOBKL_L6FY6ZJnEzn6DJbAlbNElJPRqpY" />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+    <div class="relative z-10 text-center px-4 max-w-2xl">
+      <span
+        class="inline-block px-3 py-1 bg-primary text-white text-xs font-bold rounded-full mb-4 uppercase tracking-widest">Patrimonio
+        de la Humanidad</span>
+      <h1 class="text-4xl md:text-6xl font-bold text-white mb-6">Alcalá de Henares</h1>
+      <p class="text-lg text-white/90 mb-8 font-light">Cuna de Cervantes y Ciudad de las Letras. Descubre la historia en
+        cada rincón.</p>
+      <button
+        class="bg-primary hover:bg-primary/90 text-white px-8 py-3 rounded-full font-semibold transition-all transform hover:scale-105 flex items-center gap-2 mx-auto">
+        Descubre Alcalá
+        <span class="material-icons text-sm">arrow_forward</span>
+      </button>
+    </div>
+  </section>
+  <section class="py-20 px-4 bg-white dark:bg-background-dark">
+    <div class="max-w-3xl mx-auto text-center">
+      <h2 class="text-burdeos font-bold text-sm uppercase tracking-widest mb-4">Sobre Alcalá</h2>
+      <p class="text-2xl md:text-3xl font-light text-dark-grey leading-relaxed">
+        Declarada <span class="font-semibold text-burdeos">Ciudad Patrimonio de la Humanidad</span> por la UNESCO,
+        Alcalá es un referente histórico donde la cultura y la modernidad conviven en perfecta armonía.
+      </p>
+      <div class="mt-12 grid grid-cols-3 gap-8">
+        <div>
+          <div class="text-3xl font-bold text-primary">1998</div>
+          <div class="text-xs text-dark-grey/60 uppercase mt-1">UNESCO</div>
+        </div>
+        <div>
+          <div class="text-3xl font-bold text-primary">1499</div>
+          <div class="text-xs text-dark-grey/60 uppercase mt-1">Universidad</div>
+        </div>
+        <div>
+          <div class="text-3xl font-bold text-primary">1547</div>
+          <div class="text-xs text-dark-grey/60 uppercase mt-1">Cervantes</div>
+        </div>
       </div>
     </div>
-
-    <div id="results">
-      <p id="loading" class="text-center">Cargando datos...</p>
-      <div id="error" class="alert alert-danger" style="display: none;"></div>
-
-      <div class="table-responsive">
-        <table id="stations-table" class="table table-striped table-hover table-bordered" style="display: none;">
-          <thead class="table-light">
-            <tr>
-              <th>Numero</th>
-              <th>Gasolinera</th>
-              <th>Precio</th>
-              <th>Dirección</th>
-            </tr>
-          </thead>
-          <tbody id="stations-body">
-            <!-- Rows will be populated by JS -->
-          </tbody>
-        </table>
+  </section>
+  <section class="py-20 px-4 bg-background-light dark:bg-background-dark/50">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="flex justify-between items-end mb-12">
+        <div>
+          <h2 class="text-3xl font-bold text-dark-grey">Lugares Emblemáticos</h2>
+          <p class="text-dark-grey/60 mt-2">Visitas imprescindibles en el casco histórico.</p>
+        </div>
+        <a class="text-primary font-semibold flex items-center gap-1 hover:underline" href="#">Ver todos <span
+            class="material-icons text-sm">chevron_right</span></a>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="relative h-64 overflow-hidden">
+            <img alt="Universidad de Alcalá"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1ClSp77obkJDfghgtfxaAp59_p5HtCvCkzCJv13iUngCDExIsXVWMt_6K_bU9j596dfVqJXLFos9vf6Q9AW4nb82RXWZaaihPPCSf0MKUWG_BVzX7fYOZyNPQRLsT5g9sHv37jgyvM7jORjPrsOyWTox1pGMjWfMNla8Ff4vpRueHzC6gxkZkfDZ7QKRJ8pM1bIeemcsZULFJczvSmL_DiRC31Fj6t1tNMDj-a2UxtWzM0zA6uEEV9CzBdb0HlOTqoIVAIPEtahg" />
+          </div>
+          <div class="p-6 border-b-4 border-transparent group-hover:border-primary transition-colors">
+            <h3 class="text-xl font-bold text-dark-grey mb-2">Universidad de Alcalá</h3>
+            <p class="text-dark-grey/70 text-sm leading-relaxed mb-4">Fundada por el Cardenal Cisneros, es una de las
+              joyas del Renacimiento español.</p>
+            <span class="text-xs font-bold text-burdeos uppercase tracking-widest">Renacimiento</span>
+          </div>
+        </div>
+        <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="relative h-64 overflow-hidden">
+            <img alt="Casa Natal de Cervantes"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuDB-V1QeNWVTXmpdFKFYQkq5iAMqjnfXKhEQbkSdL89Xo0VnTI835zSZIduaLjYp85_Rheml9Te9UazTTLFTf-IDbZCvByOqF8RXsHLNbLKz_vtVdcUDds6nJ2bg-OtQeDOUVohIHUIZWH4wVugjxudfEgt92PFtEFGHxKIhW5KYWifzkstDdpi43R0_nWaSvKAhXalnoOndKTcms7JEx9tl5LulSx6mApKjtH5NBGXblWB9ZFN62Y2KRT8gUhl53jEnO2OQLyVKUM" />
+          </div>
+          <div class="p-6 border-b-4 border-transparent group-hover:border-primary transition-colors">
+            <h3 class="text-xl font-bold text-dark-grey mb-2">Casa Natal de Cervantes</h3>
+            <p class="text-dark-grey/70 text-sm leading-relaxed mb-4">Descubre el lugar donde nació el autor del Quijote
+              en plena calle Mayor.</p>
+            <span class="text-xs font-bold text-burdeos uppercase tracking-widest">Museo</span>
+          </div>
+        </div>
+        <div class="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300">
+          <div class="relative h-64 overflow-hidden">
+            <img alt="Palacio Laredo"
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              src="https://lh3.googleusercontent.com/aida-public/AB6AXuBl19-mTA6-3Ic-87wMICwIqMDuP3aMniyzH1b20c6hnEsiEkcep-hmb75QfFqRcJIKEGv_8RFQP5yw3mCUqTbECfeQZqQEczrA4Q2VfwS3jytfTWk1N3NSXG8Fz6PejQpigc4GJ9dceeTNtwruDaLUeyPcvRo3O__A0ubhU66fBkJBfn9D8vh5tL1Hrbvo1c0bIsnDxTvLARvJomQNjjS1ryXeXmDPzRBA57u1wiUZIJZmXn88ox9lrfuVgp4MvAghuykaM5dY1eY" />
+          </div>
+          <div class="p-6 border-b-4 border-transparent group-hover:border-primary transition-colors">
+            <h3 class="text-xl font-bold text-dark-grey mb-2">Palacio Laredo</h3>
+            <p class="text-dark-grey/70 text-sm leading-relaxed mb-4">Una impresionante muestra del estilo neomudéjar en
+              el centro de la ciudad.</p>
+            <span class="text-xs font-bold text-burdeos uppercase tracking-widest">Monumento</span>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
-  <!-- Bootstrap Bundle with Popper -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  </section>
+  <section class="py-20 px-4 bg-white dark:bg-background-dark">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-12 text-center">
+        <h2 class="text-3xl font-bold text-dark-grey mb-3">Combustibles</h2>
+        <p class="text-dark-grey/60 max-w-xl mx-auto">Información actualizada de estaciones de servicio y precios en el
+          municipio de Alcalá de Henares.</p>
+      </div>
+      <div class="mb-8 space-y-4">
+        <div
+          class="bg-white rounded-xl border border-burdeos/10 p-2 shadow-sm flex flex-col sm:flex-row items-center gap-4">
+          <div class="relative w-full">
+            <div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+              <span class="material-symbols-outlined text-burdeos text-xl">local_gas_station</span>
+            </div>
+            <select id="fuel-select"
+              class="w-full pl-12 pr-10 py-4 bg-white border-0 focus:ring-0 text-dark-grey font-semibold text-lg appearance-none cursor-pointer">
+              <option value="">Cargando...</option>
+            </select>
+            <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+              <span class="material-symbols-outlined text-burdeos">expand_more</span>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between px-4 py-3 bg-soft-grey rounded-lg border border-dark-grey/5">
+          <div class="flex items-center gap-2 text-dark-grey/60 text-sm font-medium">
+            <span class="material-symbols-outlined text-sm">schedule</span>
+            <span id="last-update-text">Última actualización: Cargando...</span>
+          </div>
+          <div class="flex items-center gap-1 text-burdeos text-xs font-bold uppercase tracking-widest">
+            <span class="w-2 h-2 rounded-full bg-green-500"></span>
+            En tiempo real
+          </div>
+        </div>
+      </div>
+      <div class="bg-white border border-dark-grey/10 rounded-xl overflow-hidden shadow-sm">
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-dark-grey/10 bg-dark-grey text-white">
+                <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em] w-12 text-center">#</th>
+                <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em]">Estación</th>
+                <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em]">Precio (€)</th>
+                <th class="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.2em]">Dirección</th>
+              </tr>
+            </thead>
+            <tbody id="stations-body" class="divide-y divide-dark-grey/5">
+              <!-- Rows will be populated by JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="mt-6 flex items-start gap-3 p-4 bg-burdeos/5 rounded-lg border border-burdeos/10">
+        <span class="material-symbols-outlined text-burdeos">info</span>
+        <p class="text-xs text-burdeos/80 leading-relaxed italic">
+          La selección de GLP integrará automáticamente los precios de G95 y G98 correspondientes a las estaciones que
+          suministran Autogás en el municipio de Alcalá de Henares.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="h-80 relative">
+    <div class="absolute inset-0 bg-dark-grey/20 flex items-center justify-center overflow-hidden">
+      <img alt="Mapa de Alcalá de Henares" class="w-full h-full object-cover opacity-60"
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7spIWLs-EX3jGjF0qatc3k0aEarfnB_CLapSyYalDuDIcZJzZ6y4mU_lHHkX1AUeL8nn2O2aUFSQp7FmKXhoQYINfld7Xpljd6deFmqneq-QPqx0BCdvIs-yw_bIBFVTKBe8rHftDpynIyDToL-C-MmEDx8_nwrA0bjGdE1NfQVnUcY0-DXNdPZt6vU6f0-igc4KEGb1sJENlmKUblf1vxEZo6KG-jcnLDAkISUPul1b2Vmc4qzrX0wKhKEntsrVXqPT2Id055HM" />
+      <div class="absolute inset-0 bg-burdeos/10 pointer-events-none"></div>
+      <button
+        class="relative bg-white text-burdeos shadow-lg px-6 py-2 rounded-full font-bold flex items-center gap-2 hover:bg-burdeos hover:text-white transition-all">
+        <span class="material-icons">place</span>
+        Explorar en el Mapa
+      </button>
+    </div>
+  </section>
+  <footer class="bg-dark-grey text-white py-16 px-4">
+    <div class="max-w-screen-xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+        <div class="col-span-1 md:col-span-2">
+          <div class="flex items-center gap-2 mb-6">
+            <div class="w-10 h-10 bg-primary rounded flex items-center justify-center">
+              <span class="text-white font-bold text-xl">A</span>
+            </div>
+            <span class="font-bold text-2xl tracking-tight text-white">ALCALÁ</span>
+          </div>
+          <p class="text-white/60 max-w-sm mb-6 font-light">
+            Oficina de Turismo de Alcalá de Henares. Ven a conocer la ciudad donde la lengua castellana se hizo
+            universal.
+          </p>
+          <div class="flex gap-4">
+            <a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white"
+              href="#">
+              <span class="material-icons text-xl">facebook</span>
+            </a>
+            <a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white"
+              href="#">
+              <svg class="w-5 h-5 fill-current" viewBox="0 0 24 24">
+                <path
+                  d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z">
+                </path>
+              </svg>
+            </a>
+            <a class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors text-white"
+              href="#">
+              <span class="material-icons text-xl">camera_alt</span>
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm border-l-4 border-primary pl-4">Enlaces
+          </h4>
+          <ul class="space-y-4 text-white/60">
+            <li><a class="hover:text-primary transition-colors" href="#">Qué visitar</a></li>
+            <li><a class="hover:text-primary transition-colors" href="#">Dónde comer</a></li>
+            <li><a class="hover:text-primary transition-colors" href="#">Agenda Cultural</a></li>
+            <li><a class="hover:text-primary transition-colors" href="#">Servicios Públicos</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="font-bold text-white mb-6 uppercase tracking-widest text-sm border-l-4 border-primary pl-4">
+            Contacto</h4>
+          <ul class="space-y-4 text-white/60">
+            <li class="flex items-start gap-3">
+              <span class="material-icons text-primary text-sm mt-1">location_on</span>
+              <span>Calle Mayor, 45, 28801<br />Alcalá de Henares, Madrid</span>
+            </li>
+            <li class="flex items-center gap-3">
+              <span class="material-icons text-primary text-sm">phone</span>
+              <span>+34 918 89 26 94</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div
+        class="pt-8 border-t border-white/10 flex flex-col md:row justify-between items-center gap-4 text-white/40 text-xs">
+        <p>© 2024 Ayuntamiento de Alcalá de Henares. Todos los derechos reservados.</p>
+        <div class="flex gap-6">
+          <a class="hover:text-white transition-colors" href="#">Aviso Legal</a>
+          <a class="hover:text-white transition-colors" href="#">Privacidad</a>
+          <a class="hover:text-white transition-colors" href="#">Cookies</a>
+        </div>
+      </div>
+    </div>
+  </footer>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
+      // Dark Mode Toggle
+      const themeToggle = document.getElementById('theme-toggle');
+      const html = document.documentElement;
+
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        html.classList.add('dark');
+      } else {
+        html.classList.remove('dark');
+      }
+
+      themeToggle.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        localStorage.theme = html.classList.contains('dark') ? 'dark' : 'light';
+      });
+
+      // Fuel Logic
       const fuelSelect = document.getElementById('fuel-select');
-      const stationsTable = document.getElementById('stations-table');
       const stationsBody = document.getElementById('stations-body');
-      const loadingMsg = document.getElementById('loading');
-      const errorMsg = document.getElementById('error');
-      const dateSpan = document.getElementById('last-updated');
+      const dateSpan = document.getElementById('last-update-text');
 
       let allData = null;
       let fuelTypes = new Set();
 
-      // Fetch data
       fetch('https://raw.githubusercontent.com/alcaladehenares/datos/main/gasolineras.json')
-        .then(response => {
-          if (!response.ok) {
-            throw new Error("No se pudo cargar el archivo JSON");
-          }
-          return response.json();
-        })
+        .then(response => response.json())
         .then(data => {
           allData = data;
-          dateSpan.textContent = `( Incrementos en céntimos ) Fecha de actualización: ${data.Fecha || 'Desconocida'}`;
+          dateSpan.textContent = `Actualizado: ${data.Fecha}`;
           processFuelTypes(data.ListaEESSPrecio);
-          loadingMsg.style.display = 'none';
-          stationsTable.style.display = 'table';
         })
         .catch(err => {
           console.error(err);
-          loadingMsg.style.display = 'none';
-          errorMsg.textContent = `Error: ${err.message}. Asegúrate de ejecutar esto desde un servidor web.`;
-          errorMsg.style.display = 'block';
+          dateSpan.textContent = "Error al cargar datos";
         });
 
       function processFuelTypes(stations) {
@@ -115,7 +353,6 @@
               const val = station[key];
               if (val && val.trim() !== '') {
                 const fuelName = key.replace('Precio ', '');
-                // Filter out renewable fuels
                 if (!fuelName.toLowerCase().includes('renovable')) {
                   fuelTypes.add(fuelName);
                 }
@@ -124,25 +361,17 @@
           });
         });
 
-        // Populate dropdown
-        fuelSelect.innerHTML = '<option value="">-- Selecciona un combustible --</option>';
+        fuelSelect.innerHTML = '<option value="">-- Selecciona Combustible --</option>';
         const sortedTypes = Array.from(fuelTypes).sort();
         sortedTypes.forEach(type => {
           const option = document.createElement('option');
           option.value = type;
-          // Display friendly name for GLP
           option.textContent = (type === 'Gases licuados del petróleo') ? 'GLP' : type;
-
-          if (type === 'Gasolina 95 E5') {
-            option.selected = true;
-          }
+          if (type === 'Gasolina 95 E5') option.selected = true;
           fuelSelect.appendChild(option);
         });
 
-        // Initial render if we have a default selection
-        if (fuelSelect.value) {
-          renderTable(fuelSelect.value);
-        }
+        if (fuelSelect.value) renderTable(fuelSelect.value);
       }
 
       function parsePrice(priceStr) {
@@ -150,142 +379,75 @@
         return parseFloat(priceStr.replace(',', '.'));
       }
 
-      function formatPriceWithDiff(priceVal, minPrice, priceRaw) {
-        if (!priceRaw || priceVal === Infinity) return '';
-
-        const diff = (priceVal - minPrice) * 100;
-        let priceDisplay;
-
-        if (diff === 0) {
-          priceDisplay = `${priceRaw} € ( <span class='cheapest'>0.0</span> )`;
-        } else {
-          priceDisplay = `${priceRaw} € ( +${diff.toFixed(1)} )`;
-        }
-        return priceDisplay;
-      }
-
       function renderTable(selectedFuel) {
-        const stationsTableHead = stationsTable.querySelector('thead tr');
         stationsBody.innerHTML = '';
-
         if (!selectedFuel || !allData) return;
 
         const isGLP = (selectedFuel === 'Gases licuados del petróleo');
-
-        // Update Header
-        if (isGLP) {
-          stationsTableHead.innerHTML = `
-                        <th>Numero</th>
-                        <th>Gasolinera</th>
-                        <th>GLP</th>
-                        <th>Gasolina 95 E5</th>
-                        <th>Gasolina 98 E5</th>
-                        <th>Dirección</th>
-                    `;
-        } else {
-          stationsTableHead.innerHTML = `
-                        <th>Numero</th>
-                        <th>Gasolinera</th>
-                        <th>Precio</th>
-                        <th>Dirección</th>
-                    `;
-        }
-
         const stations = [];
+
         allData.ListaEESSPrecio.forEach(station => {
           const priceKey = `Precio ${selectedFuel}`;
           const priceStr = station[priceKey];
 
           if (priceStr && priceStr.trim() !== '') {
-            const stationData = {
+            stations.push({
               name: station['Rótulo'] || 'N/A',
-              address: `${station['Dirección'] || ''}, ${station['Localidad'] || ''}`,
+              address: `${station['Dirección'] || ''}`,
               priceRaw: priceStr,
-              priceVal: parsePrice(priceStr)
-            };
-
-            if (isGLP) {
-              stationData.priceG95Raw = station['Precio Gasolina 95 E5'] || '';
-              stationData.priceG95Val = parsePrice(stationData.priceG95Raw);
-
-              stationData.priceG98Raw = station['Precio Gasolina 98 E5'] || '';
-              stationData.priceG98Val = parsePrice(stationData.priceG98Raw);
-            }
-
-            stations.push(stationData);
+              priceVal: parsePrice(priceStr),
+              priceG95: isGLP ? station['Precio Gasolina 95 E5'] : null,
+              priceG98: isGLP ? station['Precio Gasolina 98 E5'] : null
+            });
           }
         });
 
-        // Sort by main fuel price
         stations.sort((a, b) => a.priceVal - b.priceVal);
-
-        if (stations.length === 0) {
-          const colSpan = isGLP ? 6 : 4;
-          stationsBody.innerHTML = `<tr><td colspan="${colSpan}" class="text-center">No hay datos para este combustible.</td></tr>`;
-          return;
-        }
-
-        const minPrice = stations[0].priceVal;
-
-        // Calculate GLOBAL mins for other fuels if in GLP mode
-        let minPriceG95 = Infinity;
-        let minPriceG98 = Infinity;
-
-        if (isGLP) {
-          allData.ListaEESSPrecio.forEach(station => {
-            const p95Str = station['Precio Gasolina 95 E5'];
-            if (p95Str) {
-              const p95 = parsePrice(p95Str);
-              if (p95 < minPriceG95) minPriceG95 = p95;
-            }
-
-            const p98Str = station['Precio Gasolina 98 E5'];
-            if (p98Str) {
-              const p98 = parsePrice(p98Str);
-              if (p98 < minPriceG98) minPriceG98 = p98;
-            }
-          });
-        }
+        const minPrice = stations.length > 0 ? stations[0].priceVal : 0;
 
         stations.forEach((station, index) => {
-          const row = document.createElement('tr');
+          const tr = document.createElement('tr');
+          tr.className = 'hover:bg-soft-grey transition-colors border-b border-dark-grey/5';
 
-          const diff = (station.priceVal - minPrice) * 100; // Difference in cents
-
-          // Apply highlighting
-          if (diff <= 4.0) {
-            row.classList.add('cheap-range');
+          const isCheapest = (station.priceVal - minPrice) < 0.009; // Approx equal
+          if (isCheapest) {
+            tr.classList.add('bg-green-50/50');
           }
 
-          const priceDisplay = formatPriceWithDiff(station.priceVal, minPrice, station.priceRaw);
-
-          if (isGLP) {
-            const priceG95Display = formatPriceWithDiff(station.priceG95Val, minPriceG95, station.priceG95Raw);
-            const priceG98Display = formatPriceWithDiff(station.priceG98Val, minPriceG98, station.priceG98Raw);
-
-            row.innerHTML = `
-                            <td>${index + 1}</td>
-                            <td>${station.name}</td>
-                            <td>${priceDisplay}</td>
-                            <td>${priceG95Display}</td>
-                            <td>${priceG98Display}</td>
-                            <td>${station.address}</td>
-                        `;
-          } else {
-            row.innerHTML = `
-                            <td>${index + 1}</td>
-                            <td>${station.name}</td>
-                            <td>${priceDisplay}</td>
-                            <td>${station.address}</td>
-                        `;
+          let priceBadge = '';
+          if (isCheapest) {
+            priceBadge = `<span class="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded font-bold uppercase ml-2">Mejor Precio</span>`;
           }
-          stationsBody.appendChild(row);
+
+          let extraPrices = '';
+          if (isGLP && station.priceG95) {
+            extraPrices = `<div class="text-xs text-dark-grey/50 mt-1">G95: ${station.priceG95} | G98: ${station.priceG98 || '-'}</div>`;
+          }
+
+          tr.innerHTML = `
+                  <td class="px-6 py-6 text-center font-medium text-dark-grey/40 text-sm">${index + 1}</td>
+                  <td class="px-6 py-6">
+                      <div class="flex flex-col">
+                          <span class="font-bold text-dark-grey text-base">${station.name}</span>
+                          ${isCheapest ? '<span class="text-[10px] font-bold text-green-600 uppercase mt-0.5 tracking-wider">Opción Económica</span>' : ''}
+                      </div>
+                  </td>
+                  <td class="px-6 py-6">
+                       <div class="flex flex-col">
+                          <div class="flex items-center">
+                              <span class="text-xl font-black text-dark-grey tracking-tight">${station.priceRaw} €</span>
+                              ${priceBadge}
+                          </div>
+                          ${extraPrices}
+                       </div>
+                  </td>
+                  <td class="px-6 py-6 text-sm text-dark-grey/60 font-light">${station.address}</td>
+              `;
+          stationsBody.appendChild(tr);
         });
       }
 
-      fuelSelect.addEventListener('change', (e) => {
-        renderTable(e.target.value);
-      });
+      fuelSelect.addEventListener('change', (e) => renderTable(e.target.value));
     });
   </script>
 </body>
