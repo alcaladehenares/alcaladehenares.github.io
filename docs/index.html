@@ -1,56 +1,293 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Alcalá de Henares</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gasolineras Alcalá de Henares</title>
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    /* Animación efecto agua */
-    .water-effect {
-      display: inline-block;
-      font-family: inherit;
-      color: #0d6efd;
-      background: linear-gradient(90deg, #0d6efd 40%, #5bc0f8 100%);
-      background-clip: text;
-      -webkit-background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      position: relative;
-      animation: wave 2.5s infinite linear;
+    /* Custom styles to complement Bootstrap */
+    .cheapest {
+      color: #198754;
       font-weight: bold;
     }
 
-    @keyframes wave {
-      0% {
-        filter: blur(0.5px) drop-shadow(0 2px 1px #5bc0f8);
-        transform: translateY(0) scaleY(1);
-      }
-      25% {
-        filter: blur(1.5px) drop-shadow(0 6px 4px #5bc0f8);
-        transform: translateY(4px) scaleY(1.05);
-      }
-      50% {
-        filter: blur(0.7px) drop-shadow(0 2px 2px #5bc0f8);
-        transform: translateY(-2px) scaleY(0.99);
-      }
-      75% {
-        filter: blur(1.2px) drop-shadow(0 4px 6px #5bc0f8);
-        transform: translateY(3px) scaleY(1.02);
-      }
-      100% {
-        filter: blur(0.5px) drop-shadow(0 2px 1px #5bc0f8);
-        transform: translateY(0) scaleY(1);
-      }
+    /* Bootstrap success color */
+    .cheap-range {
+      background-color: #d1e7dd !important;
+    }
+
+    /* Bootstrap table-success color */
+    #loading {
+      font-style: italic;
+      color: #666;
+    }
+
+    #error {
+      color: #dc3545;
+      font-weight: bold;
     }
   </style>
 </head>
-<body class="bg-light d-flex align-items-center justify-content-center" style="min-height:100vh;">
-  <div class="container text-center">
-    <h1 class="display-1 water-effect">Alcalá de Henares</h1>
+
+<body>
+  <div class="container">
+    <h1 class="text-center my-4">Precios Gasolineras Alcalá de Henares</h1>
+
+    <div class="card p-3 mb-4 shadow-sm">
+      <div class="mb-3">
+        <label for="fuel-select" class="form-label fw-bold">Selecciona combustible:</label>
+        <select id="fuel-select" class="form-select">
+          <option value="">Cargando combustibles...</option>
+        </select>
+      </div>
+      <div class="text-end">
+        <small id="last-updated" class="text-muted"></small>
+      </div>
+    </div>
+
+    <div id="results">
+      <p id="loading" class="text-center">Cargando datos...</p>
+      <div id="error" class="alert alert-danger" style="display: none;"></div>
+
+      <div class="table-responsive">
+        <table id="stations-table" class="table table-striped table-hover table-bordered" style="display: none;">
+          <thead class="table-light">
+            <tr>
+              <th>Numero</th>
+              <th>Gasolinera</th>
+              <th>Precio</th>
+              <th>Dirección</th>
+            </tr>
+          </thead>
+          <tbody id="stations-body">
+            <!-- Rows will be populated by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-  <!-- Bootstrap JS (opcional) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const fuelSelect = document.getElementById('fuel-select');
+      const stationsTable = document.getElementById('stations-table');
+      const stationsBody = document.getElementById('stations-body');
+      const loadingMsg = document.getElementById('loading');
+      const errorMsg = document.getElementById('error');
+      const dateSpan = document.getElementById('last-updated');
+
+      let allData = null;
+      let fuelTypes = new Set();
+
+      // Fetch data
+      fetch('https://raw.githubusercontent.com/alcaladehenares/datos/main/gasolineras.json')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("No se pudo cargar el archivo JSON");
+          }
+          return response.json();
+        })
+        .then(data => {
+          allData = data;
+          dateSpan.textContent = `( Incrementos en céntimos ) Fecha de actualización: ${data.Fecha || 'Desconocida'}`;
+          processFuelTypes(data.ListaEESSPrecio);
+          loadingMsg.style.display = 'none';
+          stationsTable.style.display = 'table';
+        })
+        .catch(err => {
+          console.error(err);
+          loadingMsg.style.display = 'none';
+          errorMsg.textContent = `Error: ${err.message}. Asegúrate de ejecutar esto desde un servidor web.`;
+          errorMsg.style.display = 'block';
+        });
+
+      function processFuelTypes(stations) {
+        fuelTypes.clear();
+        stations.forEach(station => {
+          Object.keys(station).forEach(key => {
+            if (key.startsWith('Precio ')) {
+              const val = station[key];
+              if (val && val.trim() !== '') {
+                const fuelName = key.replace('Precio ', '');
+                // Filter out renewable fuels
+                if (!fuelName.toLowerCase().includes('renovable')) {
+                  fuelTypes.add(fuelName);
+                }
+              }
+            }
+          });
+        });
+
+        // Populate dropdown
+        fuelSelect.innerHTML = '<option value="">-- Selecciona un combustible --</option>';
+        const sortedTypes = Array.from(fuelTypes).sort();
+        sortedTypes.forEach(type => {
+          const option = document.createElement('option');
+          option.value = type;
+          // Display friendly name for GLP
+          option.textContent = (type === 'Gases licuados del petróleo') ? 'GLP' : type;
+
+          if (type === 'Gasolina 95 E5') {
+            option.selected = true;
+          }
+          fuelSelect.appendChild(option);
+        });
+
+        // Initial render if we have a default selection
+        if (fuelSelect.value) {
+          renderTable(fuelSelect.value);
+        }
+      }
+
+      function parsePrice(priceStr) {
+        if (!priceStr) return Infinity;
+        return parseFloat(priceStr.replace(',', '.'));
+      }
+
+      function formatPriceWithDiff(priceVal, minPrice, priceRaw) {
+        if (!priceRaw || priceVal === Infinity) return '';
+
+        const diff = (priceVal - minPrice) * 100;
+        let priceDisplay;
+
+        if (diff === 0) {
+          priceDisplay = `${priceRaw} € ( <span class='cheapest'>0.0</span> )`;
+        } else {
+          priceDisplay = `${priceRaw} € ( +${diff.toFixed(1)} )`;
+        }
+        return priceDisplay;
+      }
+
+      function renderTable(selectedFuel) {
+        const stationsTableHead = stationsTable.querySelector('thead tr');
+        stationsBody.innerHTML = '';
+
+        if (!selectedFuel || !allData) return;
+
+        const isGLP = (selectedFuel === 'Gases licuados del petróleo');
+
+        // Update Header
+        if (isGLP) {
+          stationsTableHead.innerHTML = `
+                        <th>Numero</th>
+                        <th>Gasolinera</th>
+                        <th>GLP</th>
+                        <th>Gasolina 95 E5</th>
+                        <th>Gasolina 98 E5</th>
+                        <th>Dirección</th>
+                    `;
+        } else {
+          stationsTableHead.innerHTML = `
+                        <th>Numero</th>
+                        <th>Gasolinera</th>
+                        <th>Precio</th>
+                        <th>Dirección</th>
+                    `;
+        }
+
+        const stations = [];
+        allData.ListaEESSPrecio.forEach(station => {
+          const priceKey = `Precio ${selectedFuel}`;
+          const priceStr = station[priceKey];
+
+          if (priceStr && priceStr.trim() !== '') {
+            const stationData = {
+              name: station['Rótulo'] || 'N/A',
+              address: `${station['Dirección'] || ''}, ${station['Localidad'] || ''}`,
+              priceRaw: priceStr,
+              priceVal: parsePrice(priceStr)
+            };
+
+            if (isGLP) {
+              stationData.priceG95Raw = station['Precio Gasolina 95 E5'] || '';
+              stationData.priceG95Val = parsePrice(stationData.priceG95Raw);
+
+              stationData.priceG98Raw = station['Precio Gasolina 98 E5'] || '';
+              stationData.priceG98Val = parsePrice(stationData.priceG98Raw);
+            }
+
+            stations.push(stationData);
+          }
+        });
+
+        // Sort by main fuel price
+        stations.sort((a, b) => a.priceVal - b.priceVal);
+
+        if (stations.length === 0) {
+          const colSpan = isGLP ? 6 : 4;
+          stationsBody.innerHTML = `<tr><td colspan="${colSpan}" class="text-center">No hay datos para este combustible.</td></tr>`;
+          return;
+        }
+
+        const minPrice = stations[0].priceVal;
+
+        // Calculate GLOBAL mins for other fuels if in GLP mode
+        let minPriceG95 = Infinity;
+        let minPriceG98 = Infinity;
+
+        if (isGLP) {
+          allData.ListaEESSPrecio.forEach(station => {
+            const p95Str = station['Precio Gasolina 95 E5'];
+            if (p95Str) {
+              const p95 = parsePrice(p95Str);
+              if (p95 < minPriceG95) minPriceG95 = p95;
+            }
+
+            const p98Str = station['Precio Gasolina 98 E5'];
+            if (p98Str) {
+              const p98 = parsePrice(p98Str);
+              if (p98 < minPriceG98) minPriceG98 = p98;
+            }
+          });
+        }
+
+        stations.forEach((station, index) => {
+          const row = document.createElement('tr');
+
+          const diff = (station.priceVal - minPrice) * 100; // Difference in cents
+
+          // Apply highlighting
+          if (diff <= 4.0) {
+            row.classList.add('cheap-range');
+          }
+
+          const priceDisplay = formatPriceWithDiff(station.priceVal, minPrice, station.priceRaw);
+
+          if (isGLP) {
+            const priceG95Display = formatPriceWithDiff(station.priceG95Val, minPriceG95, station.priceG95Raw);
+            const priceG98Display = formatPriceWithDiff(station.priceG98Val, minPriceG98, station.priceG98Raw);
+
+            row.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${station.name}</td>
+                            <td>${priceDisplay}</td>
+                            <td>${priceG95Display}</td>
+                            <td>${priceG98Display}</td>
+                            <td>${station.address}</td>
+                        `;
+          } else {
+            row.innerHTML = `
+                            <td>${index + 1}</td>
+                            <td>${station.name}</td>
+                            <td>${priceDisplay}</td>
+                            <td>${station.address}</td>
+                        `;
+          }
+          stationsBody.appendChild(row);
+        });
+      }
+
+      fuelSelect.addEventListener('change', (e) => {
+        renderTable(e.target.value);
+      });
+    });
+  </script>
 </body>
+
 </html>
