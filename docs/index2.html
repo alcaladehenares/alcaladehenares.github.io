@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang='es'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1.0'>
+<title>Precios de Combustible</title>
+<link rel='preconnect' href='https://fonts.googleapis.com'>
+<link href='https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap' rel='stylesheet'>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;background:linear-gradient(135deg,#0f0c29 0%,#302b63 50%,#24243e 100%);color:#e0e0e0;min-height:100vh;padding:2rem 1rem}
+.container{max-width:1200px;margin:0 auto}
+.header{text-align:center;margin-bottom:3rem;animation:fadeInDown .8s ease-out}
+.header h1{font-size:clamp(1.8rem,4vw,3rem);font-weight:800;background:linear-gradient(135deg,#00f5d4,#00bbf9,#9b5de5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:.5rem;letter-spacing:-.02em}
+.subtitle{font-size:1rem;color:rgba(255,255,255,.5);font-weight:300}
+.timestamp{display:inline-block;margin-top:1rem;padding:.4rem 1.2rem;background:rgba(255,255,255,.08);border-radius:100px;font-size:.85rem;color:rgba(255,255,255,.6);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.1)}
+.stats-bar{display:flex;justify-content:center;gap:2rem;margin-bottom:2rem;animation:fadeInUp .8s ease-out .1s both}
+.stats-item{text-align:center}
+.stats-number{font-size:2rem;font-weight:800;background:linear-gradient(135deg,#00f5d4,#00bbf9);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stats-label{font-size:.75rem;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.1em}
+.search-box{max-width:500px;margin:0 auto 2.5rem;position:relative;animation:fadeInUp .8s ease-out .2s both}
+.search-box input{width:100%;padding:1rem 1.5rem 1rem 3rem;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);border-radius:16px;color:#fff;font-size:1rem;font-family:inherit;outline:none;transition:all .3s ease;backdrop-filter:blur(20px)}
+.search-box input:focus{border-color:rgba(0,245,212,.5);box-shadow:0 0 30px rgba(0,245,212,.1);background:rgba(255,255,255,.1)}
+.search-box input::placeholder{color:rgba(255,255,255,.3)}
+.search-icon{position:absolute;left:1.1rem;top:50%;transform:translateY(-50%);font-size:1.1rem;opacity:.4}
+.fuel-cards{display:grid;gap:1.5rem}
+.fuel-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;overflow:hidden;backdrop-filter:blur(20px);animation:fadeInUp .6s ease-out both;transition:transform .3s ease,box-shadow .3s ease}
+.fuel-card:hover{transform:translateY(-2px);box-shadow:0 20px 60px rgba(0,0,0,.3);border-color:rgba(255,255,255,.15)}
+.fuel-header{padding:1.5rem 2rem;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.06);background:rgba(255,255,255,.03)}
+.fuel-name{font-size:1.25rem;font-weight:700;color:#fff;letter-spacing:-.01em}
+.fuel-stats{display:flex;gap:1rem;align-items:center}
+.stat{padding:.3rem .8rem;background:rgba(0,187,249,.15);border-radius:100px;font-size:.8rem;color:#00bbf9;font-weight:500}
+.stat-range{font-size:.85rem;color:rgba(255,255,255,.5);font-weight:400}
+.stations-table{width:100%;border-collapse:collapse}
+.stations-table thead th{padding:.8rem 1.5rem;text-align:left;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.35);border-bottom:1px solid rgba(255,255,255,.06)}
+.stations-table thead th:nth-last-child(-n+2){text-align:right}
+.stations-table thead th:first-child{text-align:center;width:50px}
+.station-row{transition:background .2s ease}
+.station-row:hover{background:rgba(255,255,255,.04)}
+.station-row td{padding:.9rem 1.5rem;border-bottom:1px solid rgba(255,255,255,.03)}
+.rank{text-align:center;font-weight:600;color:rgba(255,255,255,.3);font-size:.85rem}
+.station-name strong{display:block;color:#fff;font-weight:600;font-size:.95rem}
+.station-addr{display:block;font-size:.8rem;color:rgba(255,255,255,.35);margin-top:.2rem}
+.badge-best{display:inline-block;padding:.15rem .6rem;border-radius:100px;font-size:.7rem;font-weight:600;margin-left:.5rem;vertical-align:middle;background:rgba(0,245,212,.15);color:#00f5d4;border:1px solid rgba(0,245,212,.2)}
+.price{text-align:right}
+.price-val{display:inline-block;padding:.4rem 1rem;border-radius:10px;font-weight:700;font-size:1.05rem;min-width:90px;text-align:center}
+.price-best{background:rgba(0,200,83,.15);color:#69f0ae;border:1px solid rgba(0,200,83,.2)}
+.price-mid{background:rgba(255,193,7,.15);color:#ffd54f;border:1px solid rgba(255,193,7,.2)}
+.price-high{background:rgba(244,67,54,.15);color:#ef9a9a;border:1px solid rgba(244,67,54,.2)}
+.diff{text-align:right}
+.diff-val{display:inline-block;padding:.3rem .7rem;border-radius:8px;font-size:.85rem;font-weight:500;min-width:80px;text-align:center}
+.diff-zero{color:rgba(0,245,212,.6)}
+.diff-low{background:rgba(255,193,7,.08);color:rgba(255,213,77,.7);border:1px solid rgba(255,193,7,.1)}
+.diff-high{background:rgba(244,67,54,.08);color:rgba(239,154,154,.7);border:1px solid rgba(244,67,54,.1)}
+.no-results{text-align:center;padding:4rem 2rem;color:rgba(255,255,255,.3);font-size:1.1rem;display:none}
+.footer{text-align:center;margin-top:3rem;padding:2rem;color:rgba(255,255,255,.25);font-size:.8rem}
+@keyframes fadeInDown{from{opacity:0;transform:translateY(-30px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:768px){body{padding:.8rem .4rem;font-size:14px}.header{margin-bottom:1.5rem}.header h1{font-size:1.4rem}.subtitle{font-size:.8rem}.timestamp{font-size:.7rem;padding:.3rem .8rem}.stats-bar{gap:.8rem;margin-bottom:1.2rem}.stats-number{font-size:1.4rem}.stats-label{font-size:.65rem}.search-box{margin-bottom:1.5rem}.search-box input{padding:.7rem 1rem .7rem 2.5rem;font-size:.85rem;border-radius:12px}.search-icon{left:.8rem;font-size:.9rem}.fuel-cards{gap:1rem}.fuel-card{border-radius:14px}.fuel-header{flex-direction:column;align-items:flex-start;gap:.5rem;padding:1rem 1rem}.fuel-name{font-size:1rem}.fuel-stats{flex-wrap:wrap;gap:.5rem}.stat{font-size:.7rem;padding:.2rem .6rem}.stat-range{font-size:.75rem}.stations-table thead th{padding:.5rem .5rem;font-size:.6rem;letter-spacing:.04em}.stations-table thead th:first-child{width:30px}.station-row td{padding:.55rem .5rem}.rank{font-size:.75rem}.station-name strong{font-size:.8rem}.station-addr{font-size:.7rem}.badge-best{display:block;margin-left:0;margin-top:.2rem;font-size:.6rem;padding:.1rem .4rem}.price-val{padding:.25rem .5rem;font-size:.8rem;min-width:65px;border-radius:7px}.diff-val{padding:.2rem .4rem;font-size:.7rem;min-width:60px;border-radius:6px}.footer{padding:1.5rem .5rem;font-size:.7rem}.stats-bar{flex-wrap:wrap}}@media(max-width:400px){body{padding:.5rem .3rem;font-size:13px}.header h1{font-size:1.2rem}.fuel-name{font-size:.9rem}.station-name strong{font-size:.75rem}.price-val{font-size:.75rem;padding:.2rem .4rem;min-width:55px}.diff-val{font-size:.65rem;min-width:50px}.stations-table thead th{padding:.4rem .35rem;font-size:.55rem}.station-row td{padding:.45rem .35rem}.fuel-header{padding:.8rem .8rem}}
+</style>
+</head>
+<body>
+<div class='container'>
+  <div class='header'>
+    <h1>⛽ Precios de Combustible</h1>
+    <p class='subtitle'>Estaciones de servicio — Municipio 4280</p>
+    <div class='timestamp'>🕐 Actualizado: 21/3/2026, 16:21:48</div>
+  </div>
+
+  <div class='stats-bar'>
+    <div class='stats-item'>
+      <div class='stats-number'>7</div>
+      <div class='stats-label'>Tipos de Combustible</div>
+    </div>
+    <div class='stats-item'>
+      <div class='stats-number'>30</div>
+      <div class='stats-label'>Estaciones de Servicio</div>
+    </div>
+  </div>
+
+  <div class='search-box'>
+    <span class='search-icon'>🔍</span>
+    <input type='text' id='searchInput' placeholder='Buscar combustible o gasolinera...' oninput='filterCards()'>
+  </div>
+
+  <div class='fuel-cards' id='fuelCards'>
+  </div>
+
+  <div class='no-results' id='noResults'>No se encontraron resultados</div>
+
+  <div class='footer'>
+    Datos obtenidos del Ministerio de Industria, Comercio y Turismo de España.<br>
+    Los precios se actualizan cada media hora.
+  </div>
+</div>
+
+<script>
+const combustiblesData = [{"nombre":"Gasoleo A","total":30,"precioMin":"1,819","precioMax":"2,099","estaciones":[{"posicion":1,"gasolinera":"ALCAMPO","direccion":"C.C. LA DEHESA, AUTOVIA MADRID-BARCELONA km 34,0","localidad":"ALCALA DE HENARES","precio":"1,819","diferencia":"—","esMejor":true},{"posicion":2,"gasolinera":"SUPECO","direccion":"POLIGONO LA GARENA, AV. EUROPA, S/N, S/N","localidad":"ALCALA DE HENARES","precio":"1,869","diferencia":"+5,0 cts","esMejor":false},{"posicion":3,"gasolinera":"ENERGY","direccion":"CALLE PERU, 31","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":4,"gasolinera":"LAVAPLUS","direccion":"CARRERA DE AJALVIR, 3","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":5,"gasolinera":"GASEXPRESS","direccion":"CARRETERA DAGANZO KM. 3","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":6,"gasolinera":"SHELL","direccion":"VÍA COMPLUTENSE, 105","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":7,"gasolinera":"BALLENOIL","direccion":"CALLE VARSOVIA, 2","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":8,"gasolinera":"BALLENOIL","direccion":"CARRETERA M-300 (MARGEN IZQUIERDO) KM. 26,9","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":9,"gasolinera":"BALLENOIL","direccion":"CARRETERA DAGANZO KM. 5","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":10,"gasolinera":"PETROPRIX","direccion":"CALLE ISAAC NEWTON, 155","localidad":"ALCALA DE HENARES","precio":"1,879","diferencia":"+6,0 cts","esMejor":false},{"posicion":11,"gasolinera":"GALP","direccion":"CALLE VILLAMALEA, 2","localidad":"ALCALA DE HENARES","precio":"1,919","diferencia":"+10,0 cts","esMejor":false},{"posicion":12,"gasolinera":"AVIA","direccion":"CALLE MEJICO, 17","localidad":"ALCALA DE HENARES","precio":"1,929","diferencia":"+11,0 cts","esMejor":false},{"posicion":13,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"1,929","diferencia":"+11,0 cts","esMejor":false},{"posicion":14,"gasolinera":"PLENERGY","direccion":"AVENIDA DE MADRID, 60","localidad":"ALCALA DE HENARES","precio":"1,929","diferencia":"+11,0 cts","esMejor":false},{"posicion":15,"gasolinera":"GALP","direccion":"CALLE AVENIDA MADRID ESQUINA CARLOS III, SN","localidad":"ALCALA DE HENARES","precio":"1,939","diferencia":"+12,0 cts","esMejor":false},{"posicion":16,"gasolinera":"GALP","direccion":"VÍA VIA COMPLUTENSE ESQ. C/ AVILA, N","localidad":"ALCALA DE HENARES","precio":"1,944","diferencia":"+12,5 cts","esMejor":false},{"posicion":17,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"1,969","diferencia":"+15,0 cts","esMejor":false},{"posicion":18,"gasolinera":"CARREFOUR","direccion":"POLIGONO ESPARTALES SUR, C/ FEDERICO GARCIA LORCA,, S/N","localidad":"ALCALA DE HENARES","precio":"1,989","diferencia":"+17,0 cts","esMejor":false},{"posicion":19,"gasolinera":"SHELL","direccion":"AVDA. PUERTA DE MADRID, 20","localidad":"ALCALA DE HENARES","precio":"1,999","diferencia":"+18,0 cts","esMejor":false},{"posicion":20,"gasolinera":"SHELL","direccion":"CARRETERA AJARVIL-ALCALA (PG 32C PARCELA26A) KM. S/N","localidad":"ALCALA DE HENARES","precio":"1,999","diferencia":"+18,0 cts","esMejor":false},{"posicion":21,"gasolinera":"REPSOL","direccion":"AVENIDA GUADALAJARA, 29","localidad":"ALCALA DE HENARES","precio":"2,039","diferencia":"+22,0 cts","esMejor":false},{"posicion":22,"gasolinera":"REPSOL","direccion":"VÍA COMPLUTENSE, 41","localidad":"ALCALA DE HENARES","precio":"2,039","diferencia":"+22,0 cts","esMejor":false},{"posicion":23,"gasolinera":"MOEVE","direccion":"AVENIDA VIA COMPLUTENSE, 165","localidad":"ALCALA DE HENARES","precio":"2,039","diferencia":"+22,0 cts","esMejor":false},{"posicion":24,"gasolinera":"MOEVE","direccion":"AVENIDA DAGANZO, 12","localidad":"ALCALA DE HENARES","precio":"2,039","diferencia":"+22,0 cts","esMejor":false},{"posicion":25,"gasolinera":"BP ISIDORO","direccion":"AVENIDA JUAN CARLOS I, 44","localidad":"ALCALA DE HENARES","precio":"2,039","diferencia":"+22,0 cts","esMejor":false},{"posicion":26,"gasolinera":"REPSOL","direccion":"AVENIDA JUAN CARLOS I, S/N","localidad":"ALCALA DE HENARES","precio":"2,049","diferencia":"+23,0 cts","esMejor":false},{"posicion":27,"gasolinera":"REPSOL","direccion":"CR M-300 (PG.MATILLAS-PARC.A1), P.K","localidad":"ALCALA DE HENARES","precio":"2,059","diferencia":"+24,0 cts","esMejor":false},{"posicion":28,"gasolinera":"REPSOL","direccion":"CR M-300, 30.3","localidad":"ALCALA DE HENARES","precio":"2,059","diferencia":"+24,0 cts","esMejor":false},{"posicion":29,"gasolinera":"BP RIO CORVO 365","direccion":"CARRETERA ANTIGUA N-II KM. 26,00","localidad":"ALCALA DE HENARES","precio":"2,099","diferencia":"+28,0 cts","esMejor":false},{"posicion":30,"gasolinera":"BP PUENTE ARCE 365","direccion":"CARRETERA M-300 KM. 26,4","localidad":"ALCALA DE HENARES","precio":"2,099","diferencia":"+28,0 cts","esMejor":false}]},{"nombre":"Gasoleo Premium","total":16,"precioMin":"1,857","precioMax":"2,199","estaciones":[{"posicion":1,"gasolinera":"ALCAMPO","direccion":"C.C. LA DEHESA, AUTOVIA MADRID-BARCELONA km 34,0","localidad":"ALCALA DE HENARES","precio":"1,857","diferencia":"—","esMejor":true},{"posicion":2,"gasolinera":"BALLENOIL","direccion":"CALLE VARSOVIA, 2","localidad":"ALCALA DE HENARES","precio":"1,889","diferencia":"+3,2 cts","esMejor":false},{"posicion":3,"gasolinera":"BALLENOIL","direccion":"CARRETERA M-300 (MARGEN IZQUIERDO) KM. 26,9","localidad":"ALCALA DE HENARES","precio":"1,889","diferencia":"+3,2 cts","esMejor":false},{"posicion":4,"gasolinera":"BALLENOIL","direccion":"CARRETERA DAGANZO KM. 5","localidad":"ALCALA DE HENARES","precio":"1,889","diferencia":"+3,2 cts","esMejor":false},{"posicion":5,"gasolinera":"AVIA","direccion":"CALLE MEJICO, 17","localidad":"ALCALA DE HENARES","precio":"1,949","diferencia":"+9,2 cts","esMejor":false},{"posicion":6,"gasolinera":"GALP","direccion":"CALLE VILLAMALEA, 2","localidad":"ALCALA DE HENARES","precio":"1,969","diferencia":"+11,2 cts","esMejor":false},{"posicion":7,"gasolinera":"GALP","direccion":"CALLE AVENIDA MADRID ESQUINA CARLOS III, SN","localidad":"ALCALA DE HENARES","precio":"1,989","diferencia":"+13,2 cts","esMejor":false},{"posicion":8,"gasolinera":"GALP","direccion":"VÍA VIA COMPLUTENSE ESQ. C/ AVILA, N","localidad":"ALCALA DE HENARES","precio":"1,994","diferencia":"+13,7 cts","esMejor":false},{"posicion":9,"gasolinera":"CARREFOUR","direccion":"POLIGONO ESPARTALES SUR, C/ FEDERICO GARCIA LORCA,, S/N","localidad":"ALCALA DE HENARES","precio":"2,029","diferencia":"+17,2 cts","esMejor":false},{"posicion":10,"gasolinera":"SHELL","direccion":"AVDA. PUERTA DE MADRID, 20","localidad":"ALCALA DE HENARES","precio":"2,079","diferencia":"+22,2 cts","esMejor":false},{"posicion":11,"gasolinera":"SHELL","direccion":"CARRETERA AJARVIL-ALCALA (PG 32C PARCELA26A) KM. S/N","localidad":"ALCALA DE HENARES","precio":"2,079","diferencia":"+22,2 cts","esMejor":false},{"posicion":12,"gasolinera":"MOEVE","direccion":"AVENIDA VIA COMPLUTENSE, 165","localidad":"ALCALA DE HENARES","precio":"2,099","diferencia":"+24,2 cts","esMejor":false},{"posicion":13,"gasolinera":"MOEVE","direccion":"AVENIDA DAGANZO, 12","localidad":"ALCALA DE HENARES","precio":"2,099","diferencia":"+24,2 cts","esMejor":false},{"posicion":14,"gasolinera":"BP ISIDORO","direccion":"AVENIDA JUAN CARLOS I, 44","localidad":"ALCALA DE HENARES","precio":"2,139","diferencia":"+28,2 cts","esMejor":false},{"posicion":15,"gasolinera":"BP RIO CORVO 365","direccion":"CARRETERA ANTIGUA N-II KM. 26,00","localidad":"ALCALA DE HENARES","precio":"2,199","diferencia":"+34,2 cts","esMejor":false},{"posicion":16,"gasolinera":"BP PUENTE ARCE 365","direccion":"CARRETERA M-300 KM. 26,4","localidad":"ALCALA DE HENARES","precio":"2,199","diferencia":"+34,2 cts","esMejor":false}]},{"nombre":"Gasolina 95 E5","total":30,"precioMin":"1,682","precioMax":"1,899","estaciones":[{"posicion":1,"gasolinera":"ALCAMPO","direccion":"C.C. LA DEHESA, AUTOVIA MADRID-BARCELONA km 34,0","localidad":"ALCALA DE HENARES","precio":"1,682","diferencia":"—","esMejor":true},{"posicion":2,"gasolinera":"GALP","direccion":"CALLE VILLAMALEA, 2","localidad":"ALCALA DE HENARES","precio":"1,769","diferencia":"+8,7 cts","esMejor":false},{"posicion":3,"gasolinera":"SUPECO","direccion":"POLIGONO LA GARENA, AV. EUROPA, S/N, S/N","localidad":"ALCALA DE HENARES","precio":"1,769","diferencia":"+8,7 cts","esMejor":false},{"posicion":4,"gasolinera":"ENERGY","direccion":"CALLE PERU, 31","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":5,"gasolinera":"LAVAPLUS","direccion":"CARRERA DE AJALVIR, 3","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":6,"gasolinera":"GASEXPRESS","direccion":"CARRETERA DAGANZO KM. 3","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":7,"gasolinera":"SHELL","direccion":"VÍA COMPLUTENSE, 105","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":8,"gasolinera":"GALP","direccion":"VÍA VIA COMPLUTENSE ESQ. C/ AVILA, N","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":9,"gasolinera":"BALLENOIL","direccion":"CALLE VARSOVIA, 2","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":10,"gasolinera":"BALLENOIL","direccion":"CARRETERA M-300 (MARGEN IZQUIERDO) KM. 26,9","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":11,"gasolinera":"BALLENOIL","direccion":"CARRETERA DAGANZO KM. 5","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":12,"gasolinera":"PETROPRIX","direccion":"CALLE ISAAC NEWTON, 155","localidad":"ALCALA DE HENARES","precio":"1,779","diferencia":"+9,7 cts","esMejor":false},{"posicion":13,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"1,799","diferencia":"+11,7 cts","esMejor":false},{"posicion":14,"gasolinera":"BP PUENTE ARCE 365","direccion":"CARRETERA M-300 KM. 26,4","localidad":"ALCALA DE HENARES","precio":"1,799","diferencia":"+11,7 cts","esMejor":false},{"posicion":15,"gasolinera":"AVIA","direccion":"CALLE MEJICO, 17","localidad":"ALCALA DE HENARES","precio":"1,809","diferencia":"+12,7 cts","esMejor":false},{"posicion":16,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"1,809","diferencia":"+12,7 cts","esMejor":false},{"posicion":17,"gasolinera":"PLENERGY","direccion":"AVENIDA DE MADRID, 60","localidad":"ALCALA DE HENARES","precio":"1,829","diferencia":"+14,7 cts","esMejor":false},{"posicion":18,"gasolinera":"GALP","direccion":"CALLE AVENIDA MADRID ESQUINA CARLOS III, SN","localidad":"ALCALA DE HENARES","precio":"1,839","diferencia":"+15,7 cts","esMejor":false},{"posicion":19,"gasolinera":"SHELL","direccion":"AVDA. PUERTA DE MADRID, 20","localidad":"ALCALA DE HENARES","precio":"1,839","diferencia":"+15,7 cts","esMejor":false},{"posicion":20,"gasolinera":"CARREFOUR","direccion":"POLIGONO ESPARTALES SUR, C/ FEDERICO GARCIA LORCA,, S/N","localidad":"ALCALA DE HENARES","precio":"1,839","diferencia":"+15,7 cts","esMejor":false},{"posicion":21,"gasolinera":"SHELL","direccion":"CARRETERA AJARVIL-ALCALA (PG 32C PARCELA26A) KM. S/N","localidad":"ALCALA DE HENARES","precio":"1,839","diferencia":"+15,7 cts","esMejor":false},{"posicion":22,"gasolinera":"MOEVE","direccion":"AVENIDA VIA COMPLUTENSE, 165","localidad":"ALCALA DE HENARES","precio":"1,889","diferencia":"+20,7 cts","esMejor":false},{"posicion":23,"gasolinera":"MOEVE","direccion":"AVENIDA DAGANZO, 12","localidad":"ALCALA DE HENARES","precio":"1,889","diferencia":"+20,7 cts","esMejor":false},{"posicion":24,"gasolinera":"REPSOL","direccion":"AVENIDA JUAN CARLOS I, S/N","localidad":"ALCALA DE HENARES","precio":"1,889","diferencia":"+20,7 cts","esMejor":false},{"posicion":25,"gasolinera":"REPSOL","direccion":"CR M-300 (PG.MATILLAS-PARC.A1), P.K","localidad":"ALCALA DE HENARES","precio":"1,895","diferencia":"+21,3 cts","esMejor":false},{"posicion":26,"gasolinera":"REPSOL","direccion":"AVENIDA GUADALAJARA, 29","localidad":"ALCALA DE HENARES","precio":"1,895","diferencia":"+21,3 cts","esMejor":false},{"posicion":27,"gasolinera":"REPSOL","direccion":"VÍA COMPLUTENSE, 41","localidad":"ALCALA DE HENARES","precio":"1,895","diferencia":"+21,3 cts","esMejor":false},{"posicion":28,"gasolinera":"BP ISIDORO","direccion":"AVENIDA JUAN CARLOS I, 44","localidad":"ALCALA DE HENARES","precio":"1,895","diferencia":"+21,3 cts","esMejor":false},{"posicion":29,"gasolinera":"REPSOL","direccion":"CR M-300, 30.3","localidad":"ALCALA DE HENARES","precio":"1,899","diferencia":"+21,7 cts","esMejor":false},{"posicion":30,"gasolinera":"BP RIO CORVO 365","direccion":"CARRETERA ANTIGUA N-II KM. 26,00","localidad":"ALCALA DE HENARES","precio":"1,899","diferencia":"+21,7 cts","esMejor":false}]},{"nombre":"Gasolina 95 E5 Premium","total":7,"precioMin":"1,789","precioMax":"1,949","estaciones":[{"posicion":1,"gasolinera":"BALLENOIL","direccion":"CARRETERA M-300 (MARGEN IZQUIERDO) KM. 26,9","localidad":"ALCALA DE HENARES","precio":"1,789","diferencia":"—","esMejor":true},{"posicion":2,"gasolinera":"GALP","direccion":"CALLE VILLAMALEA, 2","localidad":"ALCALA DE HENARES","precio":"1,819","diferencia":"+3,0 cts","esMejor":false},{"posicion":3,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"1,849","diferencia":"+6,0 cts","esMejor":false},{"posicion":4,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"1,859","diferencia":"+7,0 cts","esMejor":false},{"posicion":5,"gasolinera":"GALP","direccion":"CALLE AVENIDA MADRID ESQUINA CARLOS III, SN","localidad":"ALCALA DE HENARES","precio":"1,889","diferencia":"+10,0 cts","esMejor":false},{"posicion":6,"gasolinera":"MOEVE","direccion":"AVENIDA VIA COMPLUTENSE, 165","localidad":"ALCALA DE HENARES","precio":"1,929","diferencia":"+14,0 cts","esMejor":false},{"posicion":7,"gasolinera":"REPSOL","direccion":"AVENIDA JUAN CARLOS I, S/N","localidad":"ALCALA DE HENARES","precio":"1,949","diferencia":"+16,0 cts","esMejor":false}]},{"nombre":"Gasolina 98 E5","total":15,"precioMin":"1,801","precioMax":"2,045","estaciones":[{"posicion":1,"gasolinera":"ALCAMPO","direccion":"C.C. LA DEHESA, AUTOVIA MADRID-BARCELONA km 34,0","localidad":"ALCALA DE HENARES","precio":"1,801","diferencia":"—","esMejor":true},{"posicion":2,"gasolinera":"GALP","direccion":"VÍA VIA COMPLUTENSE ESQ. C/ AVILA, N","localidad":"ALCALA DE HENARES","precio":"1,919","diferencia":"+11,8 cts","esMejor":false},{"posicion":3,"gasolinera":"CARREFOUR","direccion":"POLIGONO ESPARTALES SUR, C/ FEDERICO GARCIA LORCA,, S/N","localidad":"ALCALA DE HENARES","precio":"1,969","diferencia":"+16,8 cts","esMejor":false},{"posicion":4,"gasolinera":"SHELL","direccion":"AVDA. PUERTA DE MADRID, 20","localidad":"ALCALA DE HENARES","precio":"1,979","diferencia":"+17,8 cts","esMejor":false},{"posicion":5,"gasolinera":"SHELL","direccion":"CARRETERA AJARVIL-ALCALA (PG 32C PARCELA26A) KM. S/N","localidad":"ALCALA DE HENARES","precio":"1,979","diferencia":"+17,8 cts","esMejor":false},{"posicion":6,"gasolinera":"MOEVE","direccion":"AVENIDA DAGANZO, 12","localidad":"ALCALA DE HENARES","precio":"1,991","diferencia":"+19,0 cts","esMejor":false},{"posicion":7,"gasolinera":"MOEVE","direccion":"AVENIDA VIA COMPLUTENSE, 165","localidad":"ALCALA DE HENARES","precio":"1,998","diferencia":"+19,7 cts","esMejor":false},{"posicion":8,"gasolinera":"BP RIO CORVO 365","direccion":"CARRETERA ANTIGUA N-II KM. 26,00","localidad":"ALCALA DE HENARES","precio":"1,999","diferencia":"+19,8 cts","esMejor":false},{"posicion":9,"gasolinera":"BP PUENTE ARCE 365","direccion":"CARRETERA M-300 KM. 26,4","localidad":"ALCALA DE HENARES","precio":"1,999","diferencia":"+19,8 cts","esMejor":false},{"posicion":10,"gasolinera":"REPSOL","direccion":"AVENIDA JUAN CARLOS I, S/N","localidad":"ALCALA DE HENARES","precio":"1,999","diferencia":"+19,8 cts","esMejor":false},{"posicion":11,"gasolinera":"REPSOL","direccion":"CR M-300 (PG.MATILLAS-PARC.A1), P.K","localidad":"ALCALA DE HENARES","precio":"2,005","diferencia":"+20,4 cts","esMejor":false},{"posicion":12,"gasolinera":"REPSOL","direccion":"AVENIDA GUADALAJARA, 29","localidad":"ALCALA DE HENARES","precio":"2,005","diferencia":"+20,4 cts","esMejor":false},{"posicion":13,"gasolinera":"REPSOL","direccion":"VÍA COMPLUTENSE, 41","localidad":"ALCALA DE HENARES","precio":"2,005","diferencia":"+20,4 cts","esMejor":false},{"posicion":14,"gasolinera":"REPSOL","direccion":"CR M-300, 30.3","localidad":"ALCALA DE HENARES","precio":"2,029","diferencia":"+22,8 cts","esMejor":false},{"posicion":15,"gasolinera":"BP ISIDORO","direccion":"AVENIDA JUAN CARLOS I, 44","localidad":"ALCALA DE HENARES","precio":"2,045","diferencia":"+24,4 cts","esMejor":false}]},{"nombre":"Gases licuados del petróleo","total":6,"precioMin":"0,959","precioMax":"1,035","estaciones":[{"posicion":1,"gasolinera":"SHELL","direccion":"CARRETERA AJARVIL-ALCALA (PG 32C PARCELA26A) KM. S/N","localidad":"ALCALA DE HENARES","precio":"0,959","diferencia":"—","esMejor":true},{"posicion":2,"gasolinera":"AVIA","direccion":"CALLE MEJICO, 17","localidad":"ALCALA DE HENARES","precio":"0,999","diferencia":"+4,0 cts","esMejor":false},{"posicion":3,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"0,999","diferencia":"+4,0 cts","esMejor":false},{"posicion":4,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"0,999","diferencia":"+4,0 cts","esMejor":false},{"posicion":5,"gasolinera":"REPSOL","direccion":"CR M-300 (PG.MATILLAS-PARC.A1), P.K","localidad":"ALCALA DE HENARES","precio":"1,035","diferencia":"+7,6 cts","esMejor":false},{"posicion":6,"gasolinera":"REPSOL","direccion":"AVENIDA JUAN CARLOS I, S/N","localidad":"ALCALA DE HENARES","precio":"1,035","diferencia":"+7,6 cts","esMejor":false}]},{"nombre":"Adblue","total":7,"precioMin":"0,550","precioMax":"1,290","estaciones":[{"posicion":1,"gasolinera":"LAVAPLUS","direccion":"CARRERA DE AJALVIR, 3","localidad":"ALCALA DE HENARES","precio":"0,550","diferencia":"—","esMejor":true},{"posicion":2,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"0,799","diferencia":"+24,9 cts","esMejor":false},{"posicion":3,"gasolinera":"GALP","direccion":"N-II km 29,000","localidad":"ALCALA DE HENARES","precio":"0,799","diferencia":"+24,9 cts","esMejor":false},{"posicion":4,"gasolinera":"GALP","direccion":"VÍA VIA COMPLUTENSE ESQ. C/ AVILA, N","localidad":"ALCALA DE HENARES","precio":"0,799","diferencia":"+24,9 cts","esMejor":false},{"posicion":5,"gasolinera":"GALP","direccion":"CALLE VILLAMALEA, 2","localidad":"ALCALA DE HENARES","precio":"0,799","diferencia":"+24,9 cts","esMejor":false},{"posicion":6,"gasolinera":"AVIA","direccion":"CALLE MEJICO, 17","localidad":"ALCALA DE HENARES","precio":"0,999","diferencia":"+44,9 cts","esMejor":false},{"posicion":7,"gasolinera":"SHELL","direccion":"CARRETERA AJARVIL-ALCALA (PG 32C PARCELA26A) KM. S/N","localidad":"ALCALA DE HENARES","precio":"1,290","diferencia":"+74,0 cts","esMejor":false}]}];
+
+function renderCards(data) {
+  const container = document.getElementById('fuelCards');
+  container.innerHTML = '';
+
+  data.forEach(function(fuel, idx) {
+    let rowsHtml = '';
+    fuel.estaciones.forEach(function(est) {
+      let priceClass = 'price-mid';
+      if (est.esMejor) priceClass = 'price-best';
+      else if (est.posicion === fuel.estaciones.length) priceClass = 'price-high';
+
+      const badge = est.esMejor ? '<span class="badge-best">⭐ Mejor precio</span>' : '';
+
+      rowsHtml += '<tr class="station-row">';
+      rowsHtml += '<td class="rank">' + est.posicion + '</td>';
+      rowsHtml += '<td class="station-name"><strong>' + est.gasolinera + '</strong>' + badge;
+      rowsHtml += '<span class="station-addr">' + est.direccion + '</span></td>';
+      rowsHtml += '<td class="price"><span class="price-val ' + priceClass + '">' + est.precio + ' €</span></td>';
+      var diffClass = est.esMejor ? 'diff-zero' : (est.posicion <= Math.ceil(fuel.estaciones.length / 2) ? 'diff-low' : 'diff-high');
+      rowsHtml += '<td class="diff"><span class="diff-val ' + diffClass + '">' + est.diferencia + '</span></td>';
+      rowsHtml += '</tr>';
+    });
+
+    let cardHtml = '<div class="fuel-card" style="animation-delay:' + (idx * 0.1) + 's">';
+    cardHtml += '<div class="fuel-header"><div class="fuel-name">' + fuel.nombre + '</div>';
+    cardHtml += '<div class="fuel-stats"><span class="stat">' + fuel.total + ' estaciones</span>';
+    cardHtml += '<span class="stat-range">' + fuel.precioMin + ' € — ' + fuel.precioMax + ' €</span></div></div>';
+    cardHtml += '<table class="stations-table">';
+    cardHtml += '<thead><tr><th>#</th><th>Gasolinera</th><th>Precio</th><th>Diferencia</th></tr></thead>';
+    cardHtml += '<tbody>' + rowsHtml + '</tbody></table></div>';
+
+    container.innerHTML += cardHtml;
+  });
+}
+
+function filterCards() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  if (!query) {
+    renderCards(combustiblesData);
+    document.getElementById('noResults').style.display = 'none';
+    return;
+  }
+
+  const filtered = combustiblesData.map(function(fuel) {
+    if (fuel.nombre.toLowerCase().includes(query)) return fuel;
+    const estFilt = fuel.estaciones.filter(function(e) {
+      return e.gasolinera.toLowerCase().includes(query) ||
+             e.direccion.toLowerCase().includes(query) ||
+             e.localidad.toLowerCase().includes(query);
+    });
+    if (estFilt.length > 0) {
+      return Object.assign({}, fuel, { estaciones: estFilt, total: estFilt.length });
+    }
+    return null;
+  }).filter(Boolean);
+
+  renderCards(filtered);
+  document.getElementById('noResults').style.display = filtered.length === 0 ? 'block' : 'none';
+}
+
+renderCards(combustiblesData);
+</script>
+</body>
+</html>
