@@ -1,1 +1,95 @@
- 
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Radios</title>
+<style>:root{color-scheme:dark;--card:#122238;--card2:#172c47;--text:#f3f7ff;--muted:#9fb1c9;--line:#294461;--green:#54d7aa;--red:#ff7180}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:linear-gradient(135deg,#07111f,#102b48);color:var(--text);min-height:100vh;padding-top:14px}
+.toolbar{max-width:1400px;margin:0 auto 10px;padding:0 20px}
+#S{width:100%;border:1px solid var(--line);border-radius:10px;background:#0e1d30;color:var(--text);padding:11px 14px;font:inherit}
+.grid{max-width:1400px;margin:auto;padding:0 20px 100px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.card{border:1px solid var(--line);border-radius:14px;background:linear-gradient(150deg,var(--card),var(--card2));padding:14px;box-shadow:0 8px 24px #0003}
+.card-inner{display:flex;gap:12px;align-items:center}
+.logo,.logo-fb{width:58px;height:58px;border-radius:10px;flex-shrink:0}
+.logo{background:#fff;object-fit:contain;display:block}
+.logo-fb{background:#203b59;display:grid;place-items:center;font-size:26px}
+.info{min-width:0;flex:1;overflow:hidden}
+.info h2{font-size:.96rem;margin:0 0 3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.loc{color:var(--muted);font-size:.79rem;margin-bottom:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.badges{display:flex;flex-wrap:wrap;gap:4px}
+.badge{background:#203c5d;color:#d7e9ff;border-radius:999px;padding:3px 8px;font-size:.71rem}
+.actions{margin-top:11px}
+.play{width:100%;border:0;border-radius:8px;background:var(--green);color:#06271d;padding:10px;font-weight:750;cursor:pointer;font-size:.88rem}
+.play.stop{background:var(--red);color:#33060b}
+.play:disabled{opacity:.45;cursor:not-allowed}
+.player{display:none;position:fixed;z-index:10;left:50%;bottom:12px;transform:translateX(-50%);width:min(820px,calc(100% - 20px));padding:11px 14px;border:1px solid var(--line);border-radius:13px;background:#07111ff5;box-shadow:0 10px 36px #0009;gap:12px;align-items:center}
+.player.show{display:flex}
+.player strong{min-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:.9rem}
+.player audio{width:100%}
+.message{grid-column:1/-1;text-align:center;padding:50px 20px;color:var(--muted)}
+.toast{display:none;position:fixed;z-index:20;right:16px;top:16px;padding:11px 14px;border:1px solid #34769d;border-radius:10px;background:#123452;font-size:.88rem}
+.toast.show{display:block}
+@media(max-width:600px){.grid{padding-left:10px;padding-right:10px;grid-template-columns:1fr}.player{flex-direction:column;align-items:stretch}}</style>
+</head>
+<body>
+<script type="application/json" id="D">[{"stationuuid":"962e0e57-0601-11e8-ae97-52543be04c81","name":"MegaStarFM","url":"http://megastar.cope.stream.flumotion.com/cope/megastar.mp3.m3u","url_resolved":"http://flucast30-h-cloud.flumotion.com/cope/megastar.mp3","favicon":"https://www.megastar.fm/estaticos/apple-touch-icon-192x192.png","countrycode":"ES","state":"Madrid","language":"spanish","tags":"pop,top 40","codec":"MP3","bitrate":128,"votes":7953,"custom_order":2},{"stationuuid":"960c37c6-0601-11e8-ae97-52543be04c81","name":"Cadena 100","url":"http://cadena100-streamers-mp3.flumotion.com/cope/cadena100.mp3","url_resolved":"http://cadena100-streamers-mp3.flumotion.com/cope/cadena100.mp3","favicon":"https://www.cadena100.es/estaticos/apple-touch-icon-192x192.png","countrycode":"ES","state":"","language":"spanish","tags":"music","codec":"MP3","bitrate":128,"votes":42851,"custom_order":3},{"stationuuid":"b81c57c3-eb05-47ac-a0ea-eb01a6960cc4","name":"LOS 40 Principales España","url":"https://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3","url_resolved":"https://playerservices.streamtheworld.com/api/livestream-redirect/Los40.mp3","favicon":"https://los40es00.epimg.net/iconos/v1.x/v1.0/touch-apple.png","countrycode":"ES","state":"Spain","language":"spanish","tags":"music,pop,top 40","codec":"MP3","bitrate":128,"votes":33873,"custom_order":4},{"stationuuid":"d9484397-31a2-45f0-baf8-3db8878e8bc0","name":"Hit FM","url":"https://adhandler.kissfmradio.cires21.com/get_link?url=https://bbhitfm.kissfmradio.cires21.com/bbhitfm.mp3","url_resolved":"https://adhandler.kissfmradio.cires21.com/get_link?url=https://bbhitfm.kissfmradio.cires21.com/bbhitfm.mp3","favicon":"https://www.hitfm.es/wp-content/uploads/2019/06/cropped-favicon-192x192.png","countrycode":"ES","state":"","language":"spanish","tags":"","codec":"MP3","bitrate":56,"votes":1870,"custom_order":5},{"stationuuid":"caaa4c5a-16c8-11e9-a80b-52543be04c81","name":"Chocolate FM","url":"http://streaming5.elitecomunicacion.es:8082/live.mp3","url_resolved":"http://streaming5.elitecomunicacion.es:8082/live.mp3","favicon":"https://www.chocolatefm.com/__ovh/common/img/favicon.ico","countrycode":"ES","state":"Málaga","language":"spanish","tags":"chr,dance,español,latin,latin music,latino,pop,pop latino,reggaeton,top 40,trap","codec":"MP3","bitrate":192,"votes":31964,"custom_order":6},{"stationuuid":"09149337-5dea-4c9d-af18-145febeaf94a","name":"Mix80Radio","url":"https://stream.tunerplay.com/radio/8040/radio.mp3","url_resolved":"https://stream.tunerplay.com/radio/8040/radio.mp3","favicon":"","countrycode":"ES","state":"Madrid","language":"spanish","tags":"","codec":"MP3","bitrate":256,"votes":991,"custom_order":7},{"stationuuid":"5fd13bc0-8f19-469b-bc53-9ba1a5d92286","name":"Loca FM 80s","url":"http://s02.fjperezdj.com:8075/live","url_resolved":"http://s02.fjperezdj.com:8075/live","favicon":"https://www.locafm.com/assets/img/favicon/apple-icon-120x120.png","countrycode":"ES","state":"","language":"","tags":"","codec":"MP3","bitrate":128,"votes":1449,"custom_order":8},{"stationuuid":"1fdc8bd2-a8a9-11e8-a907-52543be04c81","name":"1000 HITS 80s","url":"http://c2.auracast.net:8048/stream","url_resolved":"http://c2.auracast.net:8048/stream","favicon":"","countrycode":"ES","state":"Madrid","language":"english","tags":"70s,80s,90s,italo,italo dance,italo disco,oldies","codec":"MP3","bitrate":128,"votes":26953,"custom_order":9},{"stationuuid":"de39fc19-0636-4d05-acbb-2aba2c0d1f7a","name":"LOS40 Classic","url":"https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40_CLASSIC.mp3","url_resolved":"https://playerservices.streamtheworld.com/api/livestream-redirect/LOS40_CLASSIC.mp3","favicon":"https://los40es00.epimg.net/estaticos/recursosgraficos/v1/img/app/los40_192.png","countrycode":"ES","state":"","language":"spanish","tags":"pop rock","codec":"MP3","bitrate":128,"votes":8011,"custom_order":10},{"stationuuid":"777d14b2-f344-11e9-a96c-52543be04c81","name":"Los 40 Dance","url":"http://playerservices.streamtheworld.com/api/livestream-redirect/LOS40_DANCE_SC","url_resolved":"http://playerservices.streamtheworld.com/api/livestream-redirect/LOS40_DANCE_SC","favicon":"https://recursosweb.prisaradio.com/fotos/original/010002753887.png","countrycode":"ES","state":"","language":"spanish","tags":"dance,dance music,edm,electro,electronic,house","codec":"MP3","bitrate":128,"votes":15203,"custom_order":11},{"stationuuid":"04d1ade1-d14d-4d85-9378-9c8fcd89e30f","name":"Pepe Radio","url":"http://server10.emitironline.com:8032/","url_resolved":"http://server10.emitironline.com:8032/","favicon":"","countrycode":"ES","state":"","language":"","tags":"pop,rock","codec":"AAC","bitrate":64,"votes":266,"custom_order":12},{"stationuuid":"962a9b64-0601-11e8-ae97-52543be04c81","name":"Holiday Gym FM","url":"http://holidaygym.emitironline.com/","url_resolved":"http://holidaygym.emitironline.com/","favicon":"http://holidaygym.es/favicon.ico","countrycode":"ES","state":"","language":"spanish","tags":"dance","codec":"MP3","bitrate":128,"votes":1022,"custom_order":13},{"stationuuid":"960e4940-0601-11e8-ae97-52543be04c81","name":"Ibiza Global Radio","url":"","url_resolved":"http://cdn-peer011.streaming-pro.com:8024/ibizaglobalradio.mp3","favicon":"","countrycode":"ES","state":"Ibiza","language":"spanish","tags":"dance,electronic,house","codec":"MP3","bitrate":0,"votes":37271,"custom_order":14},{"stationuuid":"9649dec5-0601-11e8-ae97-52543be04c81","name":"Rock FM","url":"http://rockfm.cope.stream.flumotion.com/cope/rockfm-low.mp3.m3u","url_resolved":"http://flucast-bl04.flumotion.com/cope/rockfm-low.mp3","favicon":"https://www.rockfm.fm/estaticos/apple-touch-icon-192x192.png","countrycode":"ES","state":"","language":"spanish","tags":"","codec":"MP3","bitrate":96,"votes":24059,"custom_order":15},{"stationuuid":"328563aa-8f11-472b-a191-e684bfe3afec","name":"80s 90s Absolute Hits","url":"https://live.streamthe.world/absolutehits","url_resolved":"https://live.streamthe.world/absolutehits","favicon":"https://mytuner-radio.com/favicon.ico","countrycode":"ES","state":"Madrid","language":"english","tags":"80s,90s,old hits","codec":"MP3","bitrate":0,"votes":179,"custom_order":16},{"stationuuid":"aae29e02-707e-4cac-98f6-bfd325cecd87","name":"Kiss-FM Madrid","url":"https://kissfm.kissfmradio.cires21.com/kissfm.mp3","url_resolved":"https://kissfm.kissfmradio.cires21.com/kissfm.mp3","favicon":"https://www.kissfm.es/wp-content/uploads/2022/03/cropped-LOGOS_KISSFM20_CC_CMYK_Logo-KISS-FM-20-Negativo-Color-1.png","countrycode":"ES","state":"Madrid","language":"spanish","tags":"","codec":"MP3","bitrate":56,"votes":362,"custom_order":17},{"stationuuid":"b1cae36e-6db3-455c-ab2e-60be72e55b7c","name":"_80 EXITOS","url":"https://80sexitos.stream.laut.fm/80sexitos","url_resolved":"https://80sexitos.stream.laut.fm/80sexitos","favicon":"","countrycode":"ES","state":"Barcelona","language":"spanish","tags":"70s,80s,90s,dance,disco,musica romantica","codec":"MP3","bitrate":128,"votes":19934,"custom_order":18}]</script>
+<div class="toolbar"><input id="S" type="search" placeholder="Buscar nombre, provincia, codec…"></div>
+<main id="G" class="grid"></main>
+<div id="P" class="player"><strong id="N"></strong><audio id="A" controls preload="none"></audio></div>
+<div id="T" class="toast"></div>
+<script>(function(){
+var stations=JSON.parse(document.getElementById('D').textContent);
+var filtered=stations.slice(),playing=null;
+var grid=document.getElementById('G'),audio=document.getElementById('A'),player=document.getElementById('P'),nowEl=document.getElementById('N');
+function imgErr(el){var fb=document.createElement('div');fb.className='logo-fb';fb.textContent='📻';el.parentNode.replaceChild(fb,el);}
+function safeUrl(v){try{var u=new URL(v);return['http:','https:'].includes(u.protocol)?u.href:'';}catch(e){return '';}}
+function toast(m,bad){var t=document.getElementById('T');t.textContent=m;t.style.borderColor=bad?'#a23f4a':'#34769d';t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2500);}
+function createCard(s){
+  var stream=safeUrl(s.url_resolved||s.url);
+  var art=document.createElement('article');art.className='card';art.dataset.id=s.stationuuid||'';
+  var inner=document.createElement('div');inner.className='card-inner';
+  var logo=safeUrl(s.favicon);
+  if(logo){var img=document.createElement('img');img.className='logo';img.loading='lazy';img.src=logo;img.alt='';img.addEventListener('error',function(){imgErr(this);});inner.appendChild(img);}
+  else{var fb=document.createElement('div');fb.className='logo-fb';fb.textContent='📻';inner.appendChild(fb);}
+  var info=document.createElement('div');info.className='info';
+  var h2=document.createElement('h2');h2.textContent=s.name||'Sin nombre';h2.title=s.name||'';
+  var locEl=document.createElement('div');locEl.className='loc';locEl.textContent=[s.state,s.countrycode].filter(Boolean).join(' · ')||'España';
+  var bdgs=document.createElement('div');bdgs.className='badges';
+  if(s.codec){var b1=document.createElement('span');b1.className='badge';b1.textContent=s.codec;bdgs.appendChild(b1);}
+  if(s.bitrate){var b2=document.createElement('span');b2.className='badge';b2.textContent=s.bitrate+' kbps';bdgs.appendChild(b2);}
+  info.appendChild(h2);info.appendChild(locEl);info.appendChild(bdgs);
+  inner.appendChild(info);art.appendChild(inner);
+  var acts=document.createElement('div');acts.className='actions';
+  var btn=document.createElement('button');btn.className='play';btn.dataset.action='play';
+  if(!stream)btn.disabled=true;btn.textContent='▶ Escuchar';
+  acts.appendChild(btn);art.appendChild(acts);return art;
+}
+function apply(){
+  var q=document.getElementById('S').value.trim().toLowerCase();
+  filtered=q?stations.filter(function(s){return[s.name,s.state,s.language,s.tags,s.codec].join(' ').toLowerCase().includes(q);}):stations.slice();
+  render();
+}
+function render(){
+  while(grid.firstChild)grid.removeChild(grid.firstChild);
+  if(!filtered.length){var m=document.createElement('div');m.className='message';m.textContent='No hay emisoras que coincidan.';grid.appendChild(m);return;}
+  filtered.forEach(function(s){grid.appendChild(createCard(s));});
+}
+grid.addEventListener('click',function(e){
+  var btn=e.target.closest('[data-action="play"]');if(!btn)return;
+  var s=stations.find(function(x){return x.stationuuid===btn.closest('.card').dataset.id;});if(!s)return;
+  var stream=safeUrl(s.url_resolved||s.url);
+  if(playing===s.stationuuid){audio.pause();audio.removeAttribute('src');playing=null;player.classList.remove('show');btn.classList.remove('stop');btn.textContent='▶ Escuchar';}
+  else{
+    if(playing){var old=grid.querySelector('[data-id="'+playing+'"] button[data-action="play"]');if(old){old.classList.remove('stop');old.textContent='▶ Escuchar';}}
+    playing=s.stationuuid;audio.src=stream;nowEl.textContent=s.name||'Emisora';player.classList.add('show');
+    audio.play().catch(function(){toast('No se puede reproducir.',true);});
+    btn.classList.add('stop');btn.textContent='⏹ Detener';
+  }
+});
+document.getElementById('S').addEventListener('input',apply);
+apply();
+})();</script>
+</body>
+</html>
